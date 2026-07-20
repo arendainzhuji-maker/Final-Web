@@ -1,0 +1,25 @@
+{
+  "name": "last-stop-mail",
+  "version": "1.0.0",
+  "description": "Full-stack landing page for Last Stop Mail",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "keywords": [
+    "direct-mail",
+    "landing-page",
+    "express",
+    "last-stop-mail"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2",
+    "nodemailer": "^6.10.0"
+  }
+}

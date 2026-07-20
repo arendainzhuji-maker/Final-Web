@@ -1,0 +1,9 @@
+Save your hero postcard photo in THIS folder.
+
+Preferred filename: hero-postcard.jpg
+(hero-postcard.png also works)
+
+Full path:
+C:\Users\zhuji\.cursor\projects\empty-window\public\images\hero-postcard.jpg
+
+After saving, hard-refresh the site: Ctrl + Shift + R

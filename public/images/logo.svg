@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 260" role="img" aria-labelledby="logoTitle">
+  <title id="logoTitle">Last Stop Mail</title>
+  <rect x="24" y="28" width="372" height="204" rx="16" fill="#FFFFFF" stroke="#2F343A" stroke-width="4"/>
+  <rect x="44" y="48" width="332" height="72" rx="6" fill="#F7F9F8"/>
+  <rect x="56" y="60" width="28" height="48" rx="3" fill="#2F343A"/>
+  <rect x="92" y="68" width="22" height="40" rx="2" fill="#2F343A"/>
+  <rect x="122" y="56" width="18" height="52" rx="2" fill="#2F343A"/>
+  <rect x="148" y="64" width="26" height="44" rx="2" fill="#2F343A"/>
+  <rect x="182" y="72" width="20" height="36" rx="2" fill="#2F343A"/>
+  <rect x="210" y="58" width="24" height="50" rx="2" fill="#2F343A"/>
+  <rect x="242" y="66" width="18" height="42" rx="2" fill="#2F343A"/>
+  <circle cx="290" cy="84" r="22" fill="#1F5E3B"/>
+  <circle cx="318" cy="72" r="18" fill="#1F5E3B"/>
+  <circle cx="340" cy="88" r="16" fill="#1F5E3B"/>
+  <rect x="44" y="136" width="100" height="72" rx="6" fill="#E8F2EC" stroke="#1F5E3B" stroke-width="2"/>
+  <rect x="156" y="136" width="100" height="72" rx="6" fill="#F7F9F8" stroke="#2F343A" stroke-width="2"/>
+  <rect x="268" y="136" width="108" height="72" rx="6" fill="#E8F2EC" stroke="#1F5E3B" stroke-width="2"/>
+  <rect x="56" y="148" width="76" height="10" rx="2" fill="#1F5E3B" opacity="0.85"/>
+  <rect x="56" y="166" width="60" height="8" rx="2" fill="#2F343A" opacity="0.35"/>
+  <rect x="168" y="148" width="76" height="10" rx="2" fill="#2F343A" opacity="0.75"/>
+  <rect x="168" y="166" width="60" height="8" rx="2" fill="#2F343A" opacity="0.35"/>
+  <rect x="280" y="148" width="84" height="10" rx="2" fill="#1F5E3B" opacity="0.85"/>
+  <rect x="280" y="166" width="68" height="8" rx="2" fill="#2F343A" opacity="0.35"/>
+  <text x="210" y="238" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="28" font-weight="800" fill="#1F5E3B">Last Stop</text>
+  <text x="318" y="238" text-anchor="start" font-family="Montserrat, Arial, sans-serif" font-size="28" font-weight="700" fill="#2F343A"> Mail</text>
+</svg>

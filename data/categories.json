@@ -1,0 +1,58 @@
+[
+  {
+    "slug": "roofer",
+    "label": "Roofer",
+    "status": "booked",
+    "highlight": "Exclusivity claimed",
+    "description": "High-intent homeowners searching for exterior upgrades."
+  },
+  {
+    "slug": "realtor",
+    "label": "Realtor",
+    "status": "limited",
+    "highlight": "Active interest",
+    "description": "Move-up families and new buyers in growth neighbourhoods."
+  },
+  {
+    "slug": "house-cleaner",
+    "label": "House Cleaner",
+    "status": "available",
+    "highlight": "Open slot",
+    "description": "Busy professionals looking for recurring local help."
+  },
+  {
+    "slug": "hvac",
+    "label": "HVAC",
+    "status": "available",
+    "highlight": "Open slot",
+    "description": "Homeowners preparing for seasonal repair and maintenance."
+  },
+  {
+    "slug": "landscaper",
+    "label": "Landscaper",
+    "status": "limited",
+    "highlight": "Nearly taken",
+    "description": "Strong spring and summer demand for curb appeal services."
+  },
+  {
+    "slug": "dentist",
+    "label": "Dentist",
+    "status": "available",
+    "highlight": "Open slot",
+    "description": "Local family-focused household reach."
+  },
+  {
+    "slug": "mortgage-broker",
+    "label": "Mortgage Broker",
+    "status": "available",
+    "highlight": "Open slot",
+    "description": "Neighbourhood households evaluating renewals and purchases."
+  },
+  {
+    "slug": "bakery",
+    "label": "Bakery",
+    "status": "available",
+    "highlight": "Open slot",
+    "description": "Community-focused branding and repeat local discovery."
+  }
+]

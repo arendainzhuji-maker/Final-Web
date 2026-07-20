@@ -1,0 +1,236 @@
+{
+  "availabilityChecks": [
+    {
+      "id": "check_1783226600092",
+      "createdAt": "2026-07-05T04:43:20.092Z",
+      "companyName": "Edmonton Tennis Community",
+      "contactName": "zhuji arendain",
+      "email": "arendainzhuji@yahoo.com",
+      "phone": "8259933458",
+      "category": "House Cleaner",
+      "plan": "standard",
+      "notes": "something",
+      "matchedCategory": {
+        "slug": "house-cleaner",
+        "label": "House Cleaner",
+        "status": "available",
+        "highlight": "Open slot",
+        "description": "Busy professionals looking for recurring local help.",
+        "displayStatus": "Available"
+      }
+    },
+    {
+      "id": "check_1783226599621",
+      "createdAt": "2026-07-05T04:43:19.621Z",
+      "companyName": "Edmonton Tennis Community",
+      "contactName": "zhuji arendain",
+      "email": "arendainzhuji@yahoo.com",
+      "phone": "8259933458",
+      "category": "House Cleaner",
+      "plan": "standard",
+      "notes": "something",
+      "matchedCategory": {
+        "slug": "house-cleaner",
+        "label": "House Cleaner",
+        "status": "available",
+        "highlight": "Open slot",
+        "description": "Busy professionals looking for recurring local help.",
+        "displayStatus": "Available"
+      }
+    },
+    {
+      "id": "check_1783226179653",
+      "createdAt": "2026-07-05T04:36:19.653Z",
+      "companyName": "dadad",
+      "contactName": "zhuji arendain",
+      "email": "arendainzhuji@yahoo.com",
+      "phone": "8259933458",
+      "category": "Roofer",
+      "plan": "custom",
+      "notes": "dadawd",
+      "matchedCategory": {
+        "slug": "roofer",
+        "label": "Roofer",
+        "status": "booked",
+        "highlight": "Exclusivity claimed",
+        "description": "High-intent homeowners searching for exterior upgrades.",
+        "displayStatus": "Booked"
+      }
+    },
+    {
+      "id": "check_1783226126509",
+      "createdAt": "2026-07-05T04:35:26.509Z",
+      "companyName": "Edmonton Tennis Community",
+      "contactName": "zhuji arendain",
+      "email": "arendainzhuji@yahoo.com",
+      "phone": "8259933458",
+      "category": "Bakery",
+      "plan": "standard",
+      "notes": "dadaddad",
+      "matchedCategory": {
+        "slug": "bakery",
+        "label": "Bakery",
+        "status": "available",
+        "highlight": "Open slot",
+        "description": "Community-focused branding and repeat local discovery.",
+        "displayStatus": "Available"
+      }
+    },
+    {
+      "id": "check_1783224586637",
+      "createdAt": "2026-07-05T04:09:46.637Z",
+      "companyName": "Edmonton Tennis Community",
+      "contactName": "zhuji arendain",
+      "email": "arendainzhuji@gmail.com",
+      "phone": "8259933458",
+      "category": "egg",
+      "plan": "custom",
+      "notes": "hello my name is zhuji, i will be  rich with love and m,oney and i will own a corvette and live where veer and do whbatever i want because i have the money and time to spend with my loved ones",
+      "matchedCategory": null
+    },
+    {
+      "id": "check_1783224063340",
+      "createdAt": "2026-07-05T04:01:03.341Z",
+      "companyName": "vfsf",
+      "contactName": "sefeeeesfsfs",
+      "email": "effsfsfs@gmail.com",
+      "phone": "",
+      "category": "Landscaper",
+      "plan": "standard",
+      "notes": "hello",
+      "matchedCategory": {
+        "slug": "landscaper",
+        "label": "Landscaper",
+        "status": "limited",
+        "highlight": "Nearly taken",
+        "description": "Strong spring and summer demand for curb appeal services.",
+        "displayStatus": "Limited"
+      }
+    },
+    {
+      "id": "check_1783224008672",
+      "createdAt": "2026-07-05T04:00:08.672Z",
+      "companyName": "vfsf",
+      "contactName": "sefeeeesfsfs",
+      "email": "effsfsfs@gmail.com",
+      "phone": "",
+      "category": "Landscaper",
+      "plan": "standard",
+      "notes": "",
+      "matchedCategory": {
+        "slug": "landscaper",
+        "label": "Landscaper",
+        "status": "limited",
+        "highlight": "Nearly taken",
+        "description": "Strong spring and summer demand for curb appeal services.",
+        "displayStatus": "Limited"
+      }
+    }
+  ],
+  "reservations": [
+    {
+      "id": "res_1784447166645",
+      "createdAt": "2026-07-19T07:46:06.645Z",
+      "companyName": "f",
+      "contactName": "zhuji arendain",
+      "email": "arendainzhuji@gmail.com",
+      "phone": "8259933458",
+      "plan": "standard",
+      "notes": "nah"
+    },
+    {
+      "id": "res_1784447077872",
+      "createdAt": "2026-07-19T07:44:37.872Z",
+      "companyName": "Test Biz",
+      "contactName": "Zhuji",
+      "email": "test@example.com",
+      "phone": "8255550100",
+      "plan": "standard",
+      "notes": "short form test"
+    },
+    {
+      "id": "res_1784444230461",
+      "createdAt": "2026-07-19T06:57:10.461Z",
+      "companyName": "Deploy Check Co",
+      "contactName": "Test User",
+      "email": "test@example.com",
+      "phone": "8255550100",
+      "website": "",
+      "category": "Roofer",
+      "plan": "standard",
+      "offer": "Free quote",
+      "notes": "deploy check",
+      "categoryLabel": "Roofer"
+    },
+    {
+      "id": "res_1784013988599",
+      "createdAt": "2026-07-14T07:26:28.599Z",
+      "companyName": "Edmonton Tennis Community",
+      "contactName": "zhuji arendain",
+      "email": "arendainzhuji@gmail.com",
+      "phone": "8259933458",
+      "website": "",
+      "category": "Roofer",
+      "plan": "custom",
+      "offer": "dadad",
+      "notes": "",
+      "categoryLabel": "Roofer"
+    },
+    {
+      "id": "res_1784013257361",
+      "createdAt": "2026-07-14T07:14:17.361Z",
+      "companyName": "Edmonton Tennis Community",
+      "contactName": "zhuji arendain",
+      "email": "arendainzhuji@yahoo.com",
+      "phone": "8259933458",
+      "website": "",
+      "category": "adadawd",
+      "plan": "custom",
+      "offer": "dadad",
+      "notes": "",
+      "categoryLabel": "adadawd"
+    },
+    {
+      "id": "res_1784013250548",
+      "createdAt": "2026-07-14T07:14:10.548Z",
+      "companyName": "Edmonton Tennis Community",
+      "contactName": "zhuji arendain",
+      "email": "arendainzhuji@yahoo.com",
+      "phone": "8259933458",
+      "website": "",
+      "category": "adadawd",
+      "plan": "custom",
+      "offer": "dadad",
+      "notes": "",
+      "categoryLabel": "adadawd"
+    },
+    {
+      "id": "res_1783319110380",
+      "createdAt": "2026-07-06T06:25:10.380Z",
+      "companyName": "Edmonton Tennis Community",
+      "contactName": "zhuji arendain",
+      "email": "arendainzhuji@yahoo.com",
+      "phone": "8259933458",
+      "website": "",
+      "category": "Roofer",
+      "plan": "standard",
+      "offer": "dadad",
+      "notes": "dawd",
+      "categoryLabel": "Roofer"
+    },
+    {
+      "id": "res_1783227950104",
+      "createdAt": "2026-07-05T05:05:50.104Z",
+      "companyName": "Edmonton Tennis Community",
+      "contactName": "zhuji arendain",
+      "email": "arendainzhuji@yahoo.com",
+      "phone": "8259933458",
+      "website": "",
+      "category": "Roofer",
+      "plan": "standard",
+      "offer": "dadad",
+      "notes": "www",
+      "categoryLabel": "Roofer"
+    }
+  ]
+}

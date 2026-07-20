@@ -1,0 +1,16 @@
+Put your logo file in THIS folder.
+
+Required filename: logo.png
+
+Full path:
+C:\Users\zhuji\.cursor\projects\empty-window\public\images\logo.png
+
+How to verify it worked:
+1. Restart the server (Ctrl+C, then: npm.cmd run dev)
+2. Open: http://localhost:3000/images/logo.png
+   - If you see your logo image, it is in the right place.
+   - If you see "File not found", the PNG is not in this folder yet.
+3. Hard refresh the site: Ctrl + Shift + R
+
+If your file has a different name (example: Last Stop Mail.png),
+tell the agent the exact filename and they can wire the site to use it.
