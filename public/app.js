@@ -160,9 +160,12 @@ reservationForm?.addEventListener("submit", async (event) => {
     reservationForm.reset();
     setFeedback(
       reservationFeedback,
-      data.message || "Thanks — Zhuji will personally follow up about your mailing needs."
+      data.message || "Thanks — Zhuji will personally follow up about your mailing needs.",
+      !data.emailSent
     );
-    window.setTimeout(closeReservationModal, 1400);
+    if (data.emailSent !== false) {
+      window.setTimeout(closeReservationModal, 1400);
+    }
   } catch (error) {
     setFeedback(reservationFeedback, "Unable to reach the backend. Please try again.", true);
   } finally {

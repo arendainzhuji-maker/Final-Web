@@ -259,6 +259,10 @@ async function sendViaWeb3Forms(subject, fields, text) {
       replyto: fields.Email || getNotifyEmail(),
       phone: fields.Phone || "",
       message: text,
+      botcheck: false,
+      business_name: fields["Business name"] || "",
+      service: fields.Service || fields.Plan || "",
+      notes: fields.Notes || "",
     }),
   });
 
@@ -312,16 +316,40 @@ async function sendViaYahoo(subject, text) {
 
 async function sendLeadEmail(subject, fields) {
   if (shouldSkipDuplicateEmail(subject, fields)) {
-    return true;
+    return { sent: true, method: "dedupe" };
   }
 
   const { text } = buildEmailBodies(fields);
+  const errors = [];
 
   if (process.env.WEB3FORMS_ACCESS_KEY) {
-    return sendViaWeb3Forms(subject, fields, text);
+    try {
+      await sendViaWeb3Forms(subject, fields, text);
+      return { sent: true, method: "web3forms" };
+    } catch (error) {
+      errors.push(`Web3Forms: ${error.message}`);
+      console.error("Web3Forms failed:", error.message);
+    }
   }
 
-  return sendViaYahoo(subject, text);
+  const smtpUser = (process.env.SMTP_USER || "").trim();
+  const smtpPass = (process.env.SMTP_PASS || "").trim();
+
+  if (smtpUser && smtpPass) {
+    try {
+      await sendViaYahoo(subject, text);
+      return { sent: true, method: "yahoo" };
+    } catch (error) {
+      errors.push(`Yahoo SMTP: ${error.message}`);
+      console.error("Yahoo SMTP failed:", error.message);
+    }
+  }
+
+  if (!process.env.WEB3FORMS_ACCESS_KEY && !(smtpUser && smtpPass)) {
+    errors.push("No email delivery configured. Add WEB3FORMS_ACCESS_KEY on your host.");
+  }
+
+  throw new Error(errors.join(" | ") || "Email delivery failed");
 }
 
 function escapeHtml(value) {
@@ -556,10 +584,10 @@ app.post("/api/availability-check", async (req, res) => {
   submissions.availabilityChecks.unshift(entry);
   await writeJson(SUBMISSIONS_FILE, submissions);
 
-  let emailSent = false;
+  let emailResult = { sent: false, method: null };
 
   try {
-    emailSent = await sendLeadEmail(
+    emailResult = await sendLeadEmail(
       "New Inquiry",
       {
         Type: "Category availability inquiry",
@@ -574,15 +602,18 @@ app.post("/api/availability-check", async (req, res) => {
       }
     );
   } catch (error) {
-    console.error("Failed to send inquiry email:", error);
+    console.error("Failed to send inquiry email:", error.message);
   }
 
   res.json({
     success: true,
-    emailSent,
+    emailSent: emailResult.sent,
     contactName: payload.contactName,
     category: payload.category,
     planLabel: formatPlanLabel(payload.plan),
+    message: emailResult.sent
+      ? `Thanks, ${payload.contactName}. Zhuji will personally follow up about your mailing needs.`
+      : `Thanks, ${payload.contactName}. Your inquiry was saved, but email delivery failed. Please call (825) 993-3458.`,
   });
 });
 
@@ -637,8 +668,10 @@ app.post("/api/reservations", async (req, res) => {
   submissions.reservations.unshift(reservation);
   await writeJson(SUBMISSIONS_FILE, submissions);
 
+  let emailResult = { sent: false, method: null };
+
   try {
-    await sendLeadEmail(
+    emailResult = await sendLeadEmail(
       "New Reservation Request",
       {
         Type: "Quote inquiry",
@@ -652,11 +685,16 @@ app.post("/api/reservations", async (req, res) => {
       }
     );
   } catch (error) {
-    console.error("Failed to send reservation email:", error);
+    console.error("Failed to send reservation email:", error.message);
   }
 
+  const successMessage = emailResult.sent
+    ? `Thanks, ${payload.contactName}. Zhuji will personally follow up about your mailing needs.`
+    : `Thanks, ${payload.contactName}. Your inquiry was saved, but email delivery failed. Please call (825) 993-3458.`;
+
   res.status(201).json({
-    message: `Thanks, ${payload.contactName}. Zhuji will personally send you a message so you can talk through your spot, timing, and next steps.`,
+    message: successMessage,
+    emailSent: emailResult.sent,
     reservation: {
       id: reservation.id,
       companyName: reservation.companyName,

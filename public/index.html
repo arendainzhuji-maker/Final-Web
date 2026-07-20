@@ -337,8 +337,9 @@
 
           <div class="quote-modal-form">
             <button aria-label="Close quote form" class="modal-close" id="close-modal" type="button">×</button>
+            <p class="quote-mobile-title">Let's talk about your mailing needs</p>
 
-            <form class="form-grid" id="reservation-form">
+            <form class="form-grid form-grid--compact" id="reservation-form">
               <div class="form-span-2">
                 <label class="field-label" for="reserve-company">Business name</label>
                 <input class="field" id="reserve-company" name="companyName" placeholder="Northbank Dental" required type="text" />
@@ -363,9 +364,9 @@
                   <option value="custom">Not sure / custom project</option>
                 </select>
               </div>
-              <div class="form-span-2">
-                <label class="field-label" for="reserve-notes">Anything else? <span style="font-weight: 400; color: var(--muted)">(optional)</span></label>
-                <textarea class="field" id="reserve-notes" name="notes" placeholder="Offer, neighbourhood, timing — whatever helps." rows="3"></textarea>
+              <div class="form-span-2 form-optional">
+                <label class="field-label" for="reserve-notes">Notes <span class="field-optional">(optional)</span></label>
+                <textarea class="field field--compact" id="reserve-notes" name="notes" placeholder="Offer, timing, neighbourhood…" rows="2"></textarea>
               </div>
               <div class="form-span-2 quote-form-actions">
                 <button class="cta-pill cta-pill--lg" type="submit">Send inquiry →</button>

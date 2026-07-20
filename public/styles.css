@@ -1106,44 +1106,116 @@ textarea.field {
 
 @media (max-width: 819px) {
   .modal {
-    align-items: flex-end;
+    align-items: stretch;
     padding: 0;
   }
 
   .modal-panel--premium {
     width: 100%;
-    max-height: min(96dvh, 100%);
-    border-radius: 1.25rem 1.25rem 0 0;
-    border-left: 0;
-    border-right: 0;
-    border-bottom: 0;
+    max-height: 100dvh;
+    height: 100dvh;
+    border-radius: 0;
+    border: 0;
   }
 
   .quote-modal {
-    grid-template-rows: auto minmax(0, 1fr);
-    max-height: min(96dvh, 100%);
+    grid-template-rows: minmax(0, 1fr);
+    max-height: 100dvh;
+    height: 100%;
   }
 
   .quote-modal-intro {
-    padding: 1.15rem 1.15rem 1rem;
-  }
-
-  .quote-benefits {
     display: none;
   }
 
+  .quote-mobile-title {
+    display: block;
+    margin: 0 2.5rem 0.65rem 0;
+    padding-right: 0.5rem;
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+
   .quote-modal-form {
-    max-height: none;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 1.15rem 1.15rem max(1.25rem, env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-height: 100dvh;
+    height: 100%;
+    overflow: hidden;
+    padding: max(0.75rem, env(safe-area-inset-top)) 1rem max(0.75rem, env(safe-area-inset-bottom));
+  }
+
+  .quote-modal-form .form-grid--compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+
+  .quote-modal-form .form-span-2 {
+    grid-column: span 2;
+  }
+
+  .quote-modal-form .field-label {
+    margin-bottom: 0.15rem;
+    font-size: 0.78rem;
+  }
+
+  .quote-modal-form .field {
+    padding: 0.55rem 0.7rem;
+    border-radius: 0.65rem;
+  }
+
+  .quote-modal-form textarea.field--compact {
+    min-height: 2.35rem;
+    max-height: 2.35rem;
+    resize: none;
+  }
+
+  .quote-modal-form .quote-form-actions {
+    gap: 0.45rem;
+    margin-top: 0.15rem;
+  }
+
+  .quote-modal-form .cta-pill--lg {
+    width: 100%;
+    min-height: 2.55rem;
+    padding: 0.55rem 1rem;
+    font-size: 0.92rem;
+  }
+
+  .quote-modal-form .feedback {
+    font-size: 0.82rem;
+    line-height: 1.35;
   }
 
   .modal-close {
-    top: 0.65rem;
+    top: max(0.55rem, env(safe-area-inset-top));
     right: 0.65rem;
-    width: 2.75rem;
-    height: 2.75rem;
+    width: 2.35rem;
+    height: 2.35rem;
+    font-size: 1.15rem;
+  }
+}
+
+@media (max-width: 819px) and (max-height: 700px) {
+  .quote-mobile-title {
+    font-size: 1.05rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .quote-modal-form .form-grid--compact {
+    gap: 0.35rem;
+  }
+
+  .quote-modal-form .field {
+    padding: 0.48rem 0.65rem;
+  }
+
+  .quote-modal-form .form-optional {
+    display: none;
   }
 }
 
@@ -1221,6 +1293,19 @@ textarea.field {
 
 .quote-scarcity {
   margin-top: 1rem;
+}
+
+.quote-mobile-title {
+  display: none;
+}
+
+.field-optional {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.field--compact {
+  line-height: 1.35;
 }
 
 .quote-modal-form {

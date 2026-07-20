@@ -157,7 +157,7 @@ This site is **not** a plain HTML file — it needs the **Node.js server** runni
    - **Build command:** `npm install`
    - **Start command:** `npm start`
    - **Environment variables:** add:
-     - `WEB3FORMS_ACCESS_KEY=` (your Web3Forms key — recommended)
+     - `WEB3FORMS_ACCESS_KEY=` **required on Render** (Yahoo SMTP usually fails in the cloud)
      - `NOTIFY_EMAIL=arendainzhuji@yahoo.com`
      - `SITE_URL=` leave blank, OR set to your real live URL (Render URL or custom domain)
      - Optional SMTP fallback: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`

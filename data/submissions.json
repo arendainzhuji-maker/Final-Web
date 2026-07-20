@@ -129,6 +129,16 @@
   ],
   "reservations": [
     {
+      "id": "res_1784528939277",
+      "createdAt": "2026-07-20T06:28:59.277Z",
+      "companyName": "Test Co",
+      "contactName": "Test User",
+      "email": "test@example.com",
+      "phone": "780-555-0100",
+      "plan": "standard",
+      "notes": "test"
+    },
+    {
       "id": "res_1784447166645",
       "createdAt": "2026-07-19T07:46:06.645Z",
       "companyName": "f",
