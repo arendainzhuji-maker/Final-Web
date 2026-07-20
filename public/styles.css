@@ -1119,39 +1119,91 @@ textarea.field {
   }
 
   .quote-modal {
-    grid-template-rows: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
     max-height: 100dvh;
     height: 100%;
+    overflow: hidden;
   }
 
   .quote-modal-intro {
-    display: none;
+    display: block;
+    flex-shrink: 0;
+    padding: max(0.65rem, env(safe-area-inset-top)) 1rem 0.55rem;
+    padding-right: 3rem;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(165deg, #f8f5ef 0%, #ebe6dc 100%);
   }
 
-  .quote-mobile-title {
-    display: block;
-    margin: 0 2.5rem 0.65rem 0;
-    padding-right: 0.5rem;
-    font-family: var(--font-serif);
-    font-size: 1.15rem;
-    font-weight: 700;
-    line-height: 1.25;
-    color: var(--ink);
+  .quote-modal-intro .quote-eyebrow {
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+  }
+
+  .quote-modal-intro h2 {
+    margin-top: 0.35rem;
+    font-size: 1.05rem;
+    line-height: 1.2;
+  }
+
+  .quote-modal-intro .quote-lead {
+    margin-top: 0.4rem;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .quote-modal-intro .quote-benefits {
+    margin-top: 0.5rem;
+    gap: 0.3rem;
+  }
+
+  .quote-modal-intro .quote-benefits li {
+    font-size: 0.72rem;
+    line-height: 1.3;
+    gap: 0.4rem;
+  }
+
+  .quote-modal-intro .quote-benefits .check {
+    width: 0.95rem;
+    height: 0.95rem;
+    font-size: 0.58rem;
+    margin-top: 0.05rem;
+  }
+
+  .quote-modal-intro .call-link {
+    display: inline-block;
+    margin-top: 0.45rem;
+    margin-bottom: 0;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .quote-modal-intro .quote-scarcity {
+    margin-top: 0.35rem;
+    margin-bottom: 0;
+    font-size: 0.72rem;
+    color: var(--muted);
   }
 
   .quote-modal-form {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    max-height: 100dvh;
-    height: 100%;
-    overflow: hidden;
-    padding: max(0.75rem, env(safe-area-inset-top)) 1rem max(0.75rem, env(safe-area-inset-bottom));
+    justify-content: flex-start;
+    min-height: 0;
+    max-height: none;
+    height: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 0.65rem 1rem max(0.75rem, env(safe-area-inset-bottom));
   }
 
   .quote-modal-form .form-grid--compact {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.45rem;
+    gap: 0.4rem;
   }
 
   .quote-modal-form .form-span-2 {
@@ -1159,35 +1211,35 @@ textarea.field {
   }
 
   .quote-modal-form .field-label {
-    margin-bottom: 0.15rem;
-    font-size: 0.78rem;
+    margin-bottom: 0.12rem;
+    font-size: 0.76rem;
   }
 
   .quote-modal-form .field {
-    padding: 0.55rem 0.7rem;
+    padding: 0.52rem 0.68rem;
     border-radius: 0.65rem;
   }
 
   .quote-modal-form textarea.field--compact {
-    min-height: 2.35rem;
-    max-height: 2.35rem;
+    min-height: 2.2rem;
+    max-height: 2.2rem;
     resize: none;
   }
 
   .quote-modal-form .quote-form-actions {
-    gap: 0.45rem;
-    margin-top: 0.15rem;
+    gap: 0.4rem;
+    margin-top: 0.1rem;
   }
 
   .quote-modal-form .cta-pill--lg {
     width: 100%;
-    min-height: 2.55rem;
-    padding: 0.55rem 1rem;
-    font-size: 0.92rem;
+    min-height: 2.5rem;
+    padding: 0.52rem 1rem;
+    font-size: 0.9rem;
   }
 
   .quote-modal-form .feedback {
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     line-height: 1.35;
   }
 
@@ -1197,25 +1249,29 @@ textarea.field {
     width: 2.35rem;
     height: 2.35rem;
     font-size: 1.15rem;
+    z-index: 3;
   }
 }
 
 @media (max-width: 819px) and (max-height: 700px) {
-  .quote-mobile-title {
-    font-size: 1.05rem;
-    margin-bottom: 0.45rem;
+  .quote-modal-intro .quote-lead {
+    -webkit-line-clamp: 1;
   }
 
-  .quote-modal-form .form-grid--compact {
-    gap: 0.35rem;
-  }
-
-  .quote-modal-form .field {
-    padding: 0.48rem 0.65rem;
+  .quote-modal-intro .quote-benefits li:last-child {
+    display: none;
   }
 
   .quote-modal-form .form-optional {
     display: none;
+  }
+
+  .quote-modal-form .form-grid--compact {
+    gap: 0.32rem;
+  }
+
+  .quote-modal-form .field {
+    padding: 0.46rem 0.62rem;
   }
 }
 
@@ -1293,10 +1349,6 @@ textarea.field {
 
 .quote-scarcity {
   margin-top: 1rem;
-}
-
-.quote-mobile-title {
-  display: none;
 }
 
 .field-optional {
