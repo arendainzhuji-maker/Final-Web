@@ -12,18 +12,22 @@ const CATEGORIES_FILE = path.join(DATA_DIR, "categories.json");
 const SUBMISSIONS_FILE = path.join(DATA_DIR, "submissions.json");
 const IMAGES_DIR = path.join(ROOT_DIR, "public", "images");
 
+app.set("trust proxy", 1);
+
 app.use(express.json({ limit: "1mb" }));
 
-app.use((req, res, next) => {
+app.use((_req, res, next) => {
   // Never block search engines via response headers.
-  res.removeHeader("X-Robots-Tag");
+  if (res.getHeader("X-Robots-Tag")) {
+    res.removeHeader("X-Robots-Tag");
+  }
   next();
 });
 
 app.use((req, res, next) => {
   const host = (req.get("host") || "").toLowerCase();
 
-  if (host.startsWith("localhost") || host.startsWith("127.0.0.1")) {
+  if (IS_VERCEL || host.startsWith("localhost") || host.startsWith("127.0.0.1")) {
     next();
     return;
   }
@@ -784,11 +788,14 @@ function getApp() {
   return app;
 }
 
-module.exports = {
-  app,
-  getApp,
-  prepareApp,
-};
+prepareApp().catch((error) => {
+  console.error("Failed to prepare app:", error);
+});
+
+module.exports = app;
+module.exports.app = app;
+module.exports.getApp = getApp;
+module.exports.prepareApp = prepareApp;
 
 if (!IS_VERCEL && require.main === module) {
   prepareApp()
