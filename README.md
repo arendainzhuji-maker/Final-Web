@@ -30,11 +30,15 @@ Open http://localhost:3000/
 
 ## Email setup (short version)
 
-1. Copy `.env.example` to `.env`
-2. Add your Yahoo app password to `SMTP_PASS`
-3. Restart the server
+1. Get a free key at https://web3forms.com (use `arendainzhuji@yahoo.com`)
+2. Add `WEB3FORMS_ACCESS_KEY` to `.env` locally and to **Vercel → Environment Variables** when live
+3. Restart the server / redeploy
 
 Details: [SETUP.md](./SETUP.md)
+
+## Deploy on Vercel
+
+Push to GitHub, import the repo in Vercel, add `WEB3FORMS_ACCESS_KEY` and `NOTIFY_EMAIL`, then deploy. See [SETUP.md](./SETUP.md).
 
 ## Data storage
 

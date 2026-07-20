@@ -5,10 +5,12 @@ const nodemailer = require("nodemailer");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const DATA_DIR = path.join(__dirname, "data");
+const IS_VERCEL = Boolean(process.env.VERCEL);
+const ROOT_DIR = __dirname;
+const DATA_DIR = IS_VERCEL ? path.join("/tmp", "last-stop-mail-data") : path.join(ROOT_DIR, "data");
 const CATEGORIES_FILE = path.join(DATA_DIR, "categories.json");
 const SUBMISSIONS_FILE = path.join(DATA_DIR, "submissions.json");
-const IMAGES_DIR = path.join(__dirname, "public", "images");
+const IMAGES_DIR = path.join(ROOT_DIR, "public", "images");
 
 app.use(express.json({ limit: "1mb" }));
 
@@ -52,14 +54,18 @@ function getSiteUrl(req) {
 }
 
 async function renderPublicFile(filename, siteUrl) {
-  const filePath = path.join(__dirname, "public", filename);
+  const filePath = path.join(ROOT_DIR, "public", filename);
   const content = await fs.readFile(filePath, "utf8");
-  return content.replaceAll("__SITE_URL__", siteUrl);
+
+  return content
+    .replaceAll("__SITE_URL__", siteUrl)
+    .replaceAll("__NOTIFY_EMAIL__", getNotifyEmail())
+    .replaceAll("__WEB3FORMS_ACCESS_KEY__", (process.env.WEB3FORMS_ACCESS_KEY || "").trim());
 }
 
 app.get("/favicon.ico", async (_req, res, next) => {
   try {
-    const iconPath = path.join(__dirname, "public", "images", "logo-mark.png");
+    const iconPath = path.join(ROOT_DIR, "public", "images", "logo-mark.png");
     const icon = await fs.readFile(iconPath);
     res.type("image/png").send(icon);
   } catch (error) {
@@ -103,7 +109,7 @@ app.get("/privacy.html", async (req, res, next) => {
   }
 });
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(ROOT_DIR, "public")));
 
 const defaultSubmissions = {
   availabilityChecks: [],
@@ -153,8 +159,12 @@ async function resolveHeroPostcardPath() {
 }
 
 async function loadEnvFile() {
+  if (IS_VERCEL) {
+    return;
+  }
+
   try {
-    const envPath = path.join(__dirname, ".env");
+    const envPath = path.join(ROOT_DIR, ".env");
     const content = await fs.readFile(envPath, "utf8");
 
     content.split("\n").forEach((line) => {
@@ -199,8 +209,8 @@ function shouldSkipDuplicateEmail(subject, fields) {
     subject,
     fields.Email,
     fields["Contact name"],
-    fields.Category,
-    fields.Plan,
+    fields.Category || "",
+    fields.Plan || fields.Service || "",
     fields.Offer || "",
   ]
     .join("|")
@@ -440,7 +450,16 @@ async function readJson(filePath, fallback) {
 }
 
 async function writeJson(filePath, data) {
-  await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+  try {
+    await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+  } catch (error) {
+    if (IS_VERCEL) {
+      console.warn("Submission storage unavailable on Vercel (email delivery still works):", error.message);
+      return;
+    }
+
+    throw error;
+  }
 }
 
 function normalizeCategory(input) {
@@ -728,13 +747,10 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ message: "Something went wrong on the server." });
 });
 
-ensureDataFiles()
-  .then(async () => {
-    await loadEnvFile();
-    const logoPath = await resolveLogoPath();
-    const heroPostcardPath = await resolveHeroPostcardPath();
-
-    app.listen(PORT, () => {
+function logStartupInfo() {
+  resolveLogoPath()
+    .then((logoPath) => resolveHeroPostcardPath().then((heroPostcardPath) => ({ logoPath, heroPostcardPath })))
+    .then(({ logoPath, heroPostcardPath }) => {
       console.log(`Last Stop Mail running on http://localhost:${PORT}`);
       console.log(`Site logo: ${logoPath}`);
       console.log(`Hero postcard: ${heroPostcardPath || "missing (add public/images/hero-postcard.jpg)"}`);
@@ -743,13 +759,45 @@ ensureDataFiles()
         console.log("Email delivery: Web3Forms ->", getNotifyEmail());
       } else if (process.env.SMTP_USER && process.env.SMTP_PASS) {
         console.log("Email delivery: Yahoo SMTP ->", getNotifyEmail());
-        console.warn("If Yahoo fails with 550, add WEB3FORMS_ACCESS_KEY to .env (see SETUP.md)");
+        console.warn("If Yahoo fails with 550, add WEB3FORMS_ACCESS_KEY (see SETUP.md)");
       } else {
-        console.warn("Email alerts disabled. Add WEB3FORMS_ACCESS_KEY to .env (see SETUP.md)");
+        console.warn("Email alerts disabled. Add WEB3FORMS_ACCESS_KEY (see SETUP.md)");
       }
+    })
+    .catch((error) => {
+      console.error("Startup info failed:", error);
     });
-  })
-  .catch((error) => {
-    console.error("Failed to start server:", error);
-    process.exit(1);
-  });
+}
+
+function prepareApp() {
+  return ensureDataFiles()
+    .then(async () => {
+      await loadEnvFile();
+    })
+    .catch((error) => {
+      console.error("Failed to prepare app:", error);
+      throw error;
+    });
+}
+
+function getApp() {
+  return app;
+}
+
+module.exports = {
+  app,
+  getApp,
+  prepareApp,
+};
+
+if (!IS_VERCEL && require.main === module) {
+  prepareApp()
+    .then(() => {
+      logStartupInfo();
+      app.listen(PORT);
+    })
+    .catch((error) => {
+      console.error("Failed to start server:", error);
+      process.exit(1);
+    });
+}

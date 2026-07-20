@@ -137,16 +137,36 @@ Each entry includes business name, contact name, email, phone, category, plan, a
 
 ## Part 4: Publish the site live (go public)
 
-This site is **not** a plain HTML file — it needs the **Node.js server** running. You cannot host it on GitHub Pages alone.
+This site runs on **Node.js**. It works on **Vercel** (recommended if you already use it) or any Node host.
 
-### Good hosting options
+### Deploy on Vercel (recommended)
+
+1. Push your project to **GitHub**
+2. Sign up at https://vercel.com and **Import** your GitHub repo
+3. Vercel should auto-detect the project. Leave defaults:
+   - **Framework Preset:** Other
+   - **Build Command:** (leave empty)
+   - **Output Directory:** (leave empty)
+4. Add **Environment Variables**:
+   - `WEB3FORMS_ACCESS_KEY` = your key from https://web3forms.com
+   - `NOTIFY_EMAIL` = `arendainzhuji@yahoo.com`
+   - `SITE_URL` = leave blank, or your custom domain after it is connected
+5. Click **Deploy**
+6. After deploy, test:
+   - your `*.vercel.app` URL
+   - `/robots.txt` and `/sitemap.xml`
+   - **Send inquiry** on the form (check Yahoo inbox + spam)
+7. Connect your custom domain in Vercel → **Settings → Domains**
+
+**Note:** Inquiry emails are sent via Web3Forms (browser + server). Yahoo SMTP does not work reliably on Vercel.
+
+### Other hosting options
 
 | Service | Best for | Notes |
 |---------|----------|-------|
-| **Render** | Easiest free/cheap start | Connect GitHub repo, add env vars |
+| **Render** | Simple Node deploy | Connect GitHub repo, `npm start` |
 | **Railway** | Simple deploy | Same as Render |
 | **Fly.io** | More control | Good if you outgrow free tier |
-| **VPS** (DigitalOcean, etc.) | Full control | You manage the server yourself |
 
 ### Typical publish steps (example: Render)
 
@@ -185,10 +205,12 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 ### Forms work but no email arrives
 
-- **If you see `550 Mailbox unavailable`:** Yahoo SMTP is blocking sends. Switch to Web3Forms (Part 2, Option A).
-- Confirm `WEB3FORMS_ACCESS_KEY` is in `.env` and restart the server
-- Check Yahoo **Spam** folder
-- Look at PowerShell for `Lead email sent via Web3Forms`
+1. **On Render:** add `WEB3FORMS_ACCESS_KEY` in Environment variables (Yahoo SMTP usually does not work in the cloud).
+2. Get a free key at **https://web3forms.com** using **arendainzhuji@yahoo.com**.
+3. Redeploy after saving the key.
+4. Submit a test inquiry — check Yahoo inbox and spam.
+5. If you rely on the FormSubmit backup, the **first** inquiry sends an activation email to your Yahoo inbox. Click the link once to turn it on.
+6. Look at Render logs for `Lead email sent via Web3Forms`.
 
 ### Site won't open
 
