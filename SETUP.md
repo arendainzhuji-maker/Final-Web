@@ -147,10 +147,12 @@ This site runs on **Node.js**. It works on **Vercel** (recommended if you alread
    - **Framework Preset:** Other
    - **Build Command:** (leave empty)
    - **Output Directory:** (leave empty)
-4. Add **Environment Variables**:
-   - `WEB3FORMS_ACCESS_KEY` = your key from https://web3forms.com
+4. Add **Environment Variables** (copy from your local `.env` file):
+   - `SMTP_HOST` = `smtp.mail.yahoo.com`
+   - `SMTP_PORT` = `587`
+   - `SMTP_USER` = `arendainzhuji@yahoo.com`
+   - `SMTP_PASS` = your Yahoo app password
    - `NOTIFY_EMAIL` = `arendainzhuji@yahoo.com`
-   - `SITE_URL` = leave blank, or your custom domain after it is connected
 5. Click **Deploy**
 6. After deploy, test:
    - your `*.vercel.app` URL
@@ -158,7 +160,7 @@ This site runs on **Node.js**. It works on **Vercel** (recommended if you alread
    - **Send inquiry** on the form (check Yahoo inbox + spam)
 7. Connect your custom domain in Vercel → **Settings → Domains**
 
-**Note:** Inquiry emails are sent via Web3Forms (browser + server). Yahoo SMTP does not work reliably on Vercel.
+**Note:** Inquiry emails use your Yahoo SMTP settings — the same ones in your local `.env` file. You must add them to Vercel too (Vercel does not upload `.env` from your computer).
 
 ### Other hosting options
 

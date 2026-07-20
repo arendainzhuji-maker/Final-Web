@@ -335,6 +335,19 @@ async function sendLeadEmail(subject, fields) {
 
   const { text } = buildEmailBodies(fields);
   const errors = [];
+  const smtpUser = (process.env.SMTP_USER || "").trim();
+  const smtpPass = (process.env.SMTP_PASS || "").trim();
+
+  // Yahoo SMTP first — this is what worked locally before.
+  if (smtpUser && smtpPass) {
+    try {
+      await sendViaYahoo(subject, text);
+      return { sent: true, method: "yahoo" };
+    } catch (error) {
+      errors.push(`Yahoo SMTP: ${error.message}`);
+      console.error("Yahoo SMTP failed:", error.message);
+    }
+  }
 
   if (process.env.WEB3FORMS_ACCESS_KEY) {
     try {
@@ -346,21 +359,8 @@ async function sendLeadEmail(subject, fields) {
     }
   }
 
-  const smtpUser = (process.env.SMTP_USER || "").trim();
-  const smtpPass = (process.env.SMTP_PASS || "").trim();
-
-  if (smtpUser && smtpPass) {
-    try {
-      await sendViaYahoo(subject, text);
-      return { sent: true, method: "yahoo" };
-    } catch (error) {
-      errors.push(`Yahoo SMTP: ${error.message}`);
-      console.error("Yahoo SMTP failed:", error.message);
-    }
-  }
-
-  if (!process.env.WEB3FORMS_ACCESS_KEY && !(smtpUser && smtpPass)) {
-    errors.push("No email delivery configured. Add WEB3FORMS_ACCESS_KEY on your host.");
+  if (!smtpUser && !smtpPass && !process.env.WEB3FORMS_ACCESS_KEY) {
+    errors.push("Add SMTP_USER and SMTP_PASS in Vercel environment variables (same as your .env file).");
   }
 
   throw new Error(errors.join(" | ") || "Email delivery failed");
@@ -671,7 +671,8 @@ app.post("/api/reservations", async (req, res) => {
 
   if (submissionId && isProcessedSubmission(submissionId)) {
     res.status(201).json({
-      message: `Thanks, ${payload.contactName}. Zhuji will personally send you a message so you can talk through your spot, timing, and next steps.`,
+      message: `Thanks, ${payload.contactName}. Zhuji will personally follow up about your mailing needs.`,
+      emailSent: true,
       reservation: {
         companyName: payload.companyName,
         plan: payload.plan,
