@@ -3,6 +3,7 @@ const reservationFeedback = document.getElementById("reservation-feedback");
 const reservationModal = document.getElementById("reservation-modal");
 const closeModalButton = document.getElementById("close-modal");
 const NOTIFY_EMAIL = (document.body?.dataset?.notifyEmail || "laststopmails@gmail.com").trim().toLowerCase();
+const WEB3FORMS_ACCESS_KEY = (document.body?.dataset?.web3formsKey || "").trim();
 
 let reservationSubmitting = false;
 
@@ -43,6 +44,42 @@ function buildInquiryMessage(fields) {
     `Service: ${formatPlanLabel(fields.plan)}`,
     `Notes: ${fields.notes || "None"}`,
   ].join("\n");
+}
+
+async function sendViaWeb3FormsClient(fields) {
+  if (!WEB3FORMS_ACCESS_KEY) {
+    throw new Error("Web3Forms key is not configured on this page");
+  }
+
+  const response = await fetch("https://api.web3forms.com/submit", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      access_key: WEB3FORMS_ACCESS_KEY,
+      subject: "[Last Stop Mail] New Reservation Request",
+      from_name: "Last Stop Mail Website",
+      name: fields.contactName || "Website visitor",
+      email: fields.email || NOTIFY_EMAIL,
+      replyto: fields.email || NOTIFY_EMAIL,
+      phone: fields.phone || "",
+      business_name: fields.companyName || "",
+      service: formatPlanLabel(fields.plan),
+      notes: fields.notes || "",
+      message: buildInquiryMessage(fields),
+      botcheck: false,
+    }),
+  });
+
+  const result = await response.json().catch(() => ({}));
+
+  if (!response.ok || !result.success) {
+    throw new Error(result.message || `Web3Forms failed (${response.status})`);
+  }
+
+  return true;
 }
 
 async function sendInquiryEmailBackup(fields) {
@@ -224,9 +261,23 @@ reservationForm?.addEventListener("submit", async (event) => {
       emailSent = data.emailSent === true;
       successMessage =
         data.message || `Thanks, ${fields.contactName}. Zhuji will personally follow up about your mailing needs.`;
+
+      if (!emailSent) {
+        console.warn("Server saved inquiry but emailSent was false:", data);
+      }
     } catch (error) {
       // Server unreachable — still try email backup below.
       console.warn("API reservation failed, trying email backup:", error);
+    }
+
+    if (!emailSent) {
+      try {
+        await sendViaWeb3FormsClient(fields);
+        emailSent = true;
+        successMessage = `Thanks, ${fields.contactName}. Zhuji will personally follow up about your mailing needs.`;
+      } catch (web3Error) {
+        console.warn("Client Web3Forms failed:", web3Error);
+      }
     }
 
     if (!emailSent) {

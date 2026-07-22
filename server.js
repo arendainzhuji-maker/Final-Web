@@ -252,7 +252,7 @@ function isProcessedSubmission(submissionId) {
 }
 
 async function sendViaWeb3Forms(subject, fields, text) {
-  const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
+  const accessKey = (process.env.WEB3FORMS_ACCESS_KEY || "").trim();
 
   if (!accessKey) {
     return false;
@@ -280,10 +280,19 @@ async function sendViaWeb3Forms(subject, fields, text) {
     }),
   });
 
-  const result = await response.json();
+  const raw = await response.text();
+  let result = {};
+
+  try {
+    result = JSON.parse(raw);
+  } catch {
+    throw new Error(
+      `Web3Forms returned non-JSON (${response.status}). Often means domain lock or invalid key.`
+    );
+  }
 
   if (!response.ok || !result.success) {
-    throw new Error(result.message || "Web3Forms request failed");
+    throw new Error(result.message || `Web3Forms request failed (${response.status})`);
   }
 
   console.log("Lead email sent via Web3Forms to", getNotifyEmail());
@@ -735,9 +744,6 @@ app.post("/api/reservations", async (req, res) => {
     ...payload,
   };
 
-  submissions.reservations.unshift(reservation);
-  await writeJson(SUBMISSIONS_FILE, submissions);
-
   let emailResult = { sent: false, method: null };
 
   try {
@@ -758,6 +764,13 @@ app.post("/api/reservations", async (req, res) => {
     console.error("Failed to send reservation email:", error.message);
   }
 
+  try {
+    submissions.reservations.unshift(reservation);
+    await writeJson(SUBMISSIONS_FILE, submissions);
+  } catch (error) {
+    console.warn("Could not persist reservation locally:", error.message);
+  }
+
   const successMessage = emailResult.sent
     ? `Thanks, ${payload.contactName}. Zhuji will personally follow up about your mailing needs.`
     : `Thanks, ${payload.contactName}. Your inquiry was saved, but email delivery failed. Please call (825) 993-3458.`;
@@ -765,12 +778,29 @@ app.post("/api/reservations", async (req, res) => {
   res.status(201).json({
     message: successMessage,
     emailSent: emailResult.sent,
+    emailMethod: emailResult.method || null,
     reservation: {
       id: reservation.id,
       companyName: reservation.companyName,
       plan: reservation.plan,
       createdAt: reservation.createdAt,
     },
+  });
+});
+
+app.get("/api/email-status", (_req, res) => {
+  const notifyEmail = getNotifyEmail();
+  const hasWeb3Forms = Boolean((process.env.WEB3FORMS_ACCESS_KEY || "").trim());
+  const hasSmtp = Boolean((process.env.SMTP_USER || "").trim() && (process.env.SMTP_PASS || "").trim());
+
+  res.json({
+    ok: true,
+    notifyEmail,
+    web3formsConfigured: hasWeb3Forms,
+    smtpConfigured: hasSmtp,
+    hint: hasWeb3Forms
+      ? "Web3Forms emails go to the inbox you used when creating the access key (check spam)."
+      : "WEB3FORMS_ACCESS_KEY is missing on this host. Add it in Vercel Environment Variables, then Redeploy.",
   });
 });
 
