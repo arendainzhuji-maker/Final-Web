@@ -195,7 +195,7 @@ async function loadEnvFile() {
 }
 
 function getNotifyEmail() {
-  return (process.env.NOTIFY_EMAIL || "arendainzhuji@yahoo.com").trim().toLowerCase();
+  return (process.env.NOTIFY_EMAIL || "laststopmails@gmail.com").trim().toLowerCase();
 }
 
 function pruneRecentEntries(store, maxAgeMs) {
@@ -290,6 +290,40 @@ async function sendViaWeb3Forms(subject, fields, text) {
   return true;
 }
 
+async function sendViaFormSubmit(subject, fields, text) {
+  const notifyEmail = getNotifyEmail();
+  const endpoint = `https://formsubmit.co/ajax/${encodeURIComponent(notifyEmail)}`;
+
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      _subject: `[Last Stop Mail] ${subject}`,
+      _template: "table",
+      _captcha: "false",
+      name: fields["Contact name"] || "Website visitor",
+      email: fields.Email || notifyEmail,
+      phone: fields.Phone || "",
+      business_name: fields["Business name"] || "",
+      service: fields.Service || fields.Plan || fields.Category || "",
+      notes: fields.Notes || "",
+      message: text,
+    }),
+  });
+
+  const result = await response.json().catch(() => ({}));
+
+  if (!response.ok || result.success === "false" || result.success === false) {
+    throw new Error(result.message || "FormSubmit request failed");
+  }
+
+  console.log("Lead email sent via FormSubmit to", notifyEmail);
+  return true;
+}
+
 async function sendViaYahoo(subject, text) {
   const smtpUser = (process.env.SMTP_USER || "").trim();
   const smtpPass = (process.env.SMTP_PASS || "").trim();
@@ -338,17 +372,7 @@ async function sendLeadEmail(subject, fields) {
   const smtpUser = (process.env.SMTP_USER || "").trim();
   const smtpPass = (process.env.SMTP_PASS || "").trim();
 
-  // Yahoo SMTP first — this is what worked locally before.
-  if (smtpUser && smtpPass) {
-    try {
-      await sendViaYahoo(subject, text);
-      return { sent: true, method: "yahoo" };
-    } catch (error) {
-      errors.push(`Yahoo SMTP: ${error.message}`);
-      console.error("Yahoo SMTP failed:", error.message);
-    }
-  }
-
+  // Prefer providers that work on cloud hosts. Yahoo SMTP often fails with 550.
   if (process.env.WEB3FORMS_ACCESS_KEY) {
     try {
       await sendViaWeb3Forms(subject, fields, text);
@@ -359,8 +383,26 @@ async function sendLeadEmail(subject, fields) {
     }
   }
 
+  try {
+    await sendViaFormSubmit(subject, fields, text);
+    return { sent: true, method: "formsubmit" };
+  } catch (error) {
+    errors.push(`FormSubmit: ${error.message}`);
+    console.error("FormSubmit failed:", error.message);
+  }
+
+  if (smtpUser && smtpPass) {
+    try {
+      await sendViaYahoo(subject, text);
+      return { sent: true, method: "yahoo" };
+    } catch (error) {
+      errors.push(`Yahoo SMTP: ${error.message}`);
+      console.error("Yahoo SMTP failed:", error.message);
+    }
+  }
+
   if (!smtpUser && !smtpPass && !process.env.WEB3FORMS_ACCESS_KEY) {
-    errors.push("Add SMTP_USER and SMTP_PASS in Vercel environment variables (same as your .env file).");
+    errors.push("Configure WEB3FORMS_ACCESS_KEY or SMTP_USER/SMTP_PASS for email delivery.");
   }
 
   throw new Error(errors.join(" | ") || "Email delivery failed");
@@ -375,6 +417,10 @@ function escapeHtml(value) {
 }
 
 function formatPlanLabel(plan) {
+  if (plan === "community") {
+    return "Community postcard campaign (5,000 homes)";
+  }
+
   if (plan === "double") {
     return "Printing & postage";
   }
@@ -494,7 +540,7 @@ function isValidEmail(email) {
 }
 
 function isValidPlan(plan) {
-  return ["standard", "double", "custom"].includes(plan);
+  return ["community", "standard", "double", "custom"].includes(plan);
 }
 
 function summarizeCategory(category) {
@@ -761,12 +807,10 @@ function logStartupInfo() {
       console.log(`Hero postcard: ${heroPostcardPath || "missing (add public/images/hero-postcard.jpg)"}`);
 
       if (process.env.WEB3FORMS_ACCESS_KEY) {
-        console.log("Email delivery: Web3Forms ->", getNotifyEmail());
-      } else if (process.env.SMTP_USER && process.env.SMTP_PASS) {
-        console.log("Email delivery: Yahoo SMTP ->", getNotifyEmail());
-        console.warn("If Yahoo fails with 550, add WEB3FORMS_ACCESS_KEY (see SETUP.md)");
+        console.log("Email delivery: Web3Forms (+ FormSubmit / Yahoo fallback) ->", getNotifyEmail());
       } else {
-        console.warn("Email alerts disabled. Add WEB3FORMS_ACCESS_KEY (see SETUP.md)");
+        console.log("Email delivery: FormSubmit (+ Yahoo fallback if SMTP set) ->", getNotifyEmail());
+        console.warn("First FormSubmit inquiry may send an activation email — open it once in Yahoo.");
       }
     })
     .catch((error) => {

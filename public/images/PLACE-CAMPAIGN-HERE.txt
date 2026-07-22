@@ -1,0 +1,12 @@
+Save your community campaign photo in THIS folder.
+
+Preferred filename: campaign-postcard.jpg
+(campaign-postcard.png also works — update index.html if you use .png)
+
+Suggested image: photo of the shared postcard, a stack of mailers, or a mockup
+showing the multi-business layout going to Edmonton homes.
+
+Full path:
+C:\Users\zhuji\.cursor\projects\empty-window\public\images\campaign-postcard.jpg
+
+After saving, hard-refresh the site: Ctrl + Shift + R

@@ -26,11 +26,11 @@ Open http://localhost:3000/
 ## Contact on the site
 
 - Phone: [(825) 993-3458](tel:+18259933458)
-- Email: arendainzhuji@yahoo.com
+- Email: laststopmails@gmail.com
 
 ## Email setup (short version)
 
-1. Get a free key at https://web3forms.com (use `arendainzhuji@yahoo.com`)
+1. Get a free key at https://web3forms.com (use `laststopmails@gmail.com`)
 2. Add `WEB3FORMS_ACCESS_KEY` to `.env` locally and to **Vercel → Environment Variables** when live
 3. Restart the server / redeploy
 
